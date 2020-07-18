@@ -14,7 +14,7 @@ public class register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        //获取
         confirm = (Button) findViewById(R.id.button15);
         username = (EditText) findViewById(R.id.editText4);
         pwd1 = (EditText) findViewById(R.id.editText5);
