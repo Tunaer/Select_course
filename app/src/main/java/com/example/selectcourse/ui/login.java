@@ -1,4 +1,4 @@
-package com.example.selectcourse;
+package com.example.selectcourse.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.selectcourse.R;
 
 public class login extends AppCompatActivity {
     EditText username,pwd;
@@ -32,8 +34,8 @@ public class login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(com.example.selectcourse.login.this,Manage.class);
-                Toast.makeText(com.example.selectcourse.login.this,"管理员页面",Toast.LENGTH_SHORT);
+                intent.setClass(com.example.selectcourse.ui.login.this,Manage.class);
+                Toast.makeText(com.example.selectcourse.ui.login.this,"管理员页面",Toast.LENGTH_SHORT);
                 startActivity(intent);
             }
         });
@@ -43,7 +45,7 @@ public class login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(com.example.selectcourse.login.this,register.class);
+                intent.setClass(com.example.selectcourse.ui.login.this,register.class);
                 startActivity(intent);
             }
         });
@@ -52,7 +54,7 @@ public class login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(com.example.selectcourse.login.this,getpwd.class);
+                intent.setClass(com.example.selectcourse.ui.login.this,getpwd.class);
                 startActivity(intent);
             }
         });

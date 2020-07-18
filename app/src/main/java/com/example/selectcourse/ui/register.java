@@ -1,10 +1,12 @@
-package com.example.selectcourse;
+package com.example.selectcourse.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.selectcourse.R;
 
 public class register extends AppCompatActivity {
     EditText username,pwd1,pwd2,email,key;

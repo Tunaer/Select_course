@@ -1,9 +1,11 @@
-package com.example.selectcourse;
+package com.example.selectcourse.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ListView;
+
+import com.example.selectcourse.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

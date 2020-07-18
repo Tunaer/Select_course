@@ -1,4 +1,4 @@
-package com.example.selectcourse;
+package com.example.selectcourse.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.selectcourse.R;
 
 public class getpwd extends AppCompatActivity {
     EditText id,email,pwd1,pwd2;
