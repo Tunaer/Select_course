@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Manage">
+    tools:context=".ui.ManageActivity">
 
     <TextView
         android:id="@+id/textView5"
@@ -60,7 +60,7 @@
         app:layout_constraintVertical_bias="0.094" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/login_inp_pwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"

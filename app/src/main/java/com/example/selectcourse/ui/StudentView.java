@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class student extends AppCompatActivity {
+public class StudentView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

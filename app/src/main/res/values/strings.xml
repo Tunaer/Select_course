@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">SelectCourse</string>
+    <!-- login 页面 -->
+    <string name="login_btn_login">登陆</string>
+    <string name="login_btn_signin">注册</string>
+    <string name="login_btn_admin">管理员界面</string>
+    <string name="login_text_forget">忘记密码</string>
+    <string name="login_pwd_hint">请输入密码</string>
+    <string name="login_pwd_label">密码：</string>
+    <string name="login_name_hint">请输入用户名</string>
+    <string name="login_name_label">学工号：</string>
+    <string name="login_title">登 陆 界 面</string>
+
+    <string name="placeholder">占位</string>
+
 </resources>

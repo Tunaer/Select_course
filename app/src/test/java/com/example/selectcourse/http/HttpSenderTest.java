@@ -1,5 +1,7 @@
 package com.example.selectcourse.http;
 
+import com.example.selectcourse.util.HttpSender;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -7,13 +9,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static org.junit.Assert.*;
 
 public class HttpSenderTest {
 

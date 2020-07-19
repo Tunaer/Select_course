@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.example.selectcourse.R;
 
-public class Manage extends AppCompatActivity {
+public class ManageActivity extends AppCompatActivity {
     EditText courseid,coursername;
     Button select,insert,update,delete;
     @Override
@@ -19,7 +19,7 @@ public class Manage extends AppCompatActivity {
         setContentView(R.layout.activity_manage);
 
         courseid = (EditText) findViewById(R.id.editText1);
-        coursername = (EditText) findViewById(R.id.editText2);
+        coursername = (EditText) findViewById(R.id.login_inp_pwd);
         select = (Button) findViewById(R.id.button2);
         insert = (Button) findViewById(R.id.button1);
         update = (Button) findViewById(R.id.button3);
@@ -30,7 +30,7 @@ public class Manage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(Manage.this,course_update.class);
+                intent.setClass(ManageActivity.this,course_update.class);
                 startActivity(intent);
             }
         });
