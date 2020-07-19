@@ -22,9 +22,12 @@
     <LinearLayout
         android:layout_width="416dp"
         android:layout_height="665dp"
+        android:layout_marginTop="66dp"
         android:orientation="vertical"
         android:padding="3dip"
-        tools:layout_editor_absoluteY="66dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableLayout
             android:id="@+id/table4"
@@ -33,7 +36,9 @@
             android:padding="3dip"
             android:stretchColumns="*">
 
-            <TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <Button
                     android:layout_width="1dip"
@@ -47,9 +52,29 @@
                     android:layout_width="1dip"
                     android:text="三个字"></Button>
             </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </TableRow>
         </TableLayout>
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

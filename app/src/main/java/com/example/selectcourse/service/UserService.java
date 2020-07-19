@@ -25,4 +25,18 @@ public class UserService {
         HttpSender.requestForJson("/user/login", "GET", params,
                 json -> callback.accept(json == null ? null : json.getJSONObject("object")));
     }
+
+//    public static void signin(String username,String pwd,String email,String admin,Consumer<JSONObject> callback){
+//        HashMap<String, String> params = new HashMap<>();
+//        params.put("username", username);
+//        params.put("pwd", pwd);
+//        params.put("email",email);
+//        params.put("admin",admin);
+
+//        HttpSender.requestForJson("/user/signin", "PUSH", params,
+//                json -> callback.accept(json == null ? null : json.getJSONObject("object")));
+//    }
+
+
+
 }

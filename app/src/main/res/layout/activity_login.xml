@@ -6,26 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
-    <Button
-        android:id="@+id/login_btn_admin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="290dp"
-        android:layout_marginTop="447dp"
-        android:text="@string/login_btn_admin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="567dp"
-        android:layout_marginLeft="108dp"
         android:layout_marginStart="108dp"
+        android:layout_marginLeft="108dp"
         android:layout_marginTop="117dp"
+        android:layout_marginBottom="567dp"
         android:text="@string/login_title"
         android:textColor="#FDD61149"
         android:textSize="35sp"
@@ -38,27 +26,25 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="494dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="210dp"
-        android:layout_toLeftOf="@+id/textView"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_toStartOf="@+id/textView"
+        android:layout_toLeftOf="@+id/textView"
         android:text="@string/login_name_label"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.23" />
+        app:layout_constraintVertical_bias="0.298" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="426dp"
-        android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="275dp"
+        android:layout_marginBottom="426dp"
         android:text="@string/login_pwd_label"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,21 +56,22 @@
         android:id="@+id/login_inp_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/login_name_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.715"
+        app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.283"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="0.282" />
 
     <EditText
         android:id="@+id/login_inp_pwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/login_pwd_hint"
         android:inputType="textPassword"
@@ -93,41 +80,36 @@
         app:layout_constraintHorizontal_bias="0.715"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.389"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="0.389" />
 
     <Button
         android:id="@+id/login_btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="312dp"
-        android:layout_marginTop="371dp"
         android:onClick="onLogin"
         android:text="@string/login_btn_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.552"
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/login_btn_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="193dp"
-        android:layout_marginTop="527dp"
         android:text="@string/login_btn_signin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.645"
         tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/login_text_forget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="164dp"
         android:layout_marginStart="164dp"
-        android:layout_marginTop="624dp"
+        android:layout_marginLeft="164dp"
+        android:layout_marginTop="580dp"
         android:text="@string/login_text_forget"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"

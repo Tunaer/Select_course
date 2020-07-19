@@ -48,15 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = (EditText) findViewById(R.id.login_inp_name);
         pwdInput = (EditText) findViewById(R.id.login_inp_pwd);
         getpwd = (TextView) findViewById(R.id.login_text_forget);
-        manage = (Button) findViewById(R.id.login_btn_admin);
-
-        //转到管理员页面
-        manage.setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, ManageActivity.class);
-            Toast.makeText(LoginActivity.this, "管理员页面", Toast.LENGTH_SHORT).show();
-            startActivity(intent);
-        });
 
         //跳转注册
         register.setOnClickListener(view -> {

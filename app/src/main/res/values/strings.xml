@@ -7,10 +7,13 @@
     <string name="login_text_forget">忘记密码</string>
     <string name="login_pwd_hint">请输入密码</string>
     <string name="login_pwd_label">密码：</string>
-    <string name="login_name_hint">请输入用户名</string>
-    <string name="login_name_label">学工号：</string>
+    <string name="login_name_hint">请输入邮箱</string>
+    <string name="login_name_label">邮箱：</string>
     <string name="login_title">登 陆 界 面</string>
 
     <string name="placeholder">占位</string>
+
+
+
 
 </resources>
