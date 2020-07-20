@@ -15,7 +15,7 @@
         android:networkSecurityConfig="@xml/http_config"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.StudentView"></activity>
-        <activity android:name=".ui.course_update" />
+        <activity android:name=".ui.CourseUpdateActivity" />
         <activity android:name=".ui.ManageActivity" />
         <activity android:name=".ui.getpwd" />
         <activity android:name=".ui.register" />

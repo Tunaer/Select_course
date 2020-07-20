@@ -74,7 +74,7 @@
         app:layout_constraintVertical_bias="0.158" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/admin_btn_insert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="添加"

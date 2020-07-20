@@ -11,6 +11,7 @@ import java.util.function.Consumer;
  * @author cxlm
  * 07.19 11:17
  * 用户相关业务逻辑，静态类
+ * 针对用户忘记了创建实体类，但是不想改了
  */
 public class UserService {
 
