@@ -15,14 +15,14 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class HttpSenderTest {
-
+    /*
     @Test
     public void request() throws InterruptedException {
         HashMap<String, String> loginPar = new HashMap<>();
         loginPar.put("email", "t@t.t");
         loginPar.put("pwd", "5");
         Semaphore sem = new Semaphore(0);  // 使用信号量，等待回调函数执行
-        HttpSender.request("/user/login", "GET", loginPar, new Callback() {
+        HttpSender.request("/user/login", "PUT", loginPar, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.err.println("请求失败");
@@ -40,4 +40,5 @@ public class HttpSenderTest {
         // 等待结果
         sem.acquire();
     }
+     */
 }
