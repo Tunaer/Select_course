@@ -15,15 +15,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpSender {
@@ -72,27 +75,39 @@ public class HttpSender {
             sb.deleteCharAt(sb.length() - 1);
             urlParam = sb.toString();
         }
-        OkHttpClient client = new OkHttpClient.Builder().cookieJar(new CookieJar() {
-            // 保存 Cookie
-            @Override
-            public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
-                COOKIE_MAP.put(httpUrl.host(), list);
-                list.forEach(item -> {  // 登录凭证特殊处理
-                    if (item.name().equals("JSESSIONID")) {
-                        Session.set("JSESSIONID", item.value());
+        OkHttpClient client = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)  // 处理 BUG： 不可预知的响应结尾
+                .cookieJar(new CookieJar() {
+                    // 保存 Cookie
+                    @Override
+                    public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
+                        COOKIE_MAP.put(httpUrl.host(), list);
+                        list.forEach(item -> {  // 登录凭证特殊处理
+                            if (item.name().equals("JSESSIONID")) {
+                                Session.set("JSESSIONID", item.value());
+                            }
+                        });
                     }
-                });
-            }
 
-            // 读取 Cookie
-            @NotNull
-            @Override
-            public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-                List<Cookie> cookies = COOKIE_MAP.get(httpUrl.host());
-                return cookies == null ? new LinkedList<>() : cookies;
-            }
-        }).build();
-        Request request = new Request.Builder().url(SERVER_BASE + urlSuffix + urlParam).method(method, null).build();
+                    // 读取 Cookie
+                    @NotNull
+                    @Override
+                    public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
+                        List<Cookie> cookies = COOKIE_MAP.get(httpUrl.host());
+                        return cookies == null ? new LinkedList<>() : cookies;
+                    }
+                }).build();
+        Request.Builder builder = new Request.Builder();
+        builder.url(SERVER_BASE + urlSuffix + urlParam);
+        // builder.addHeader("Connection", "close");
+        if(method.equals("PUT") || method.equals("POST")){
+            RequestBody body = new FormBody.Builder().build();  // 空的请求正文
+            builder.method(method, body);
+            builder.addHeader("Content-Length", "0");
+        }else{
+            builder.method(method, null);
+        }
+        Request request = builder.build();
         Call call = client.newCall(request);  // 发送请求
         call.enqueue(callback);  // 回调
     }
@@ -110,6 +125,7 @@ public class HttpSender {
         request(urlSuffix, method, parameters, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
                 callback.accept(null);
             }
 
