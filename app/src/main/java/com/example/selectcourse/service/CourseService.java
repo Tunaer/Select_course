@@ -1,9 +1,14 @@
 package com.example.selectcourse.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.selectcourse.entity.Course;
 import com.example.selectcourse.util.HttpSender;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author cxlm
@@ -42,5 +47,19 @@ public class CourseService {
                     else if (json.getInteger("state") == 0) callback.accept("权限不足或登录过期");
                     else callback.accept(null);
                 });
+    }
+
+    // 获取所有课程
+    public static void getAllCourses(Consumer<List<Course>> callback) {
+        HttpSender.requestForJson("/opt/list", "GET", null, json -> {
+            if (json == null || json.getJSONArray("object") == null) callback.accept(null);
+            else {
+                JSONArray rawCourses = json.getJSONArray("object");
+                List<Course> courses = rawCourses.stream().
+                        map(rawObj -> Course.fromJsonObject((JSONObject) (rawObj))).
+                        collect(Collectors.toList());
+                callback.accept(courses);
+            }
+        });
     }
 }

@@ -61,7 +61,7 @@ public class HttpSender {
                                final Callback callback) {
         // 不要跟老夫谈什么请求正文，管他什么用户信息还是密码，通通明文传输（有空可以尝试做一下，使用 RequestBodyBuilder 构建）
         String urlParam = "";
-        if (parameters.size() != 0) {  // 如果传入了参数，需要拼接 URL
+        if (parameters != null && parameters.size() != 0) {  // 如果传入了参数，需要拼接 URL
             StringBuilder sb = new StringBuilder("?");
             parameters.forEach((k, v) -> {
                 try {
@@ -100,11 +100,11 @@ public class HttpSender {
         Request.Builder builder = new Request.Builder();
         builder.url(SERVER_BASE + urlSuffix + urlParam);
         // builder.addHeader("Connection", "close");
-        if(method.equals("PUT") || method.equals("POST")){
+        if (method.equals("PUT") || method.equals("POST")) {
             RequestBody body = new FormBody.Builder().build();  // 空的请求正文
             builder.method(method, body);
             builder.addHeader("Content-Length", "0");
-        }else{
+        } else {
             builder.method(method, null);
         }
         Request request = builder.build();
