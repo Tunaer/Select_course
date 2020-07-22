@@ -44,9 +44,9 @@ public class ManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
 
-        courseid = (EditText) findViewById(R.id.editText1);
-        coursername = (EditText) findViewById(R.id.login_inp_pwd);
-        select = (Button) findViewById(R.id.button2);
+//        courseid = (EditText) findViewById(R.id.editText1);
+//        coursername = (EditText) findViewById(R.id.login_inp_pwd);
+//        select = (Button) findViewById(R.id.button2);
         insert = (Button) findViewById(R.id.admin_btn_insert);
         update = (Button) findViewById(R.id.button3);
         delete = (Button) findViewById(R.id.button4);
