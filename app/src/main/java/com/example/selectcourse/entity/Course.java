@@ -35,6 +35,10 @@ public class Course implements Serializable {
         return hour;
     }
 
+    public String getHourStr() {
+        return hour + "";
+    }
+
     public String getWay() {
         return way;
     }

@@ -6,7 +6,11 @@ import com.example.selectcourse.entity.Course;
 import com.example.selectcourse.util.HttpSender;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -61,5 +65,30 @@ public class CourseService {
                 callback.accept(courses);
             }
         });
+    }
+
+    public static String deleteCourses(List<Course> toDelete) {
+        CountDownLatch countDown = new CountDownLatch(toDelete.size());
+        StringBuilder sb = new StringBuilder();
+        toDelete.forEach(course->{
+            Map<String, String> idMap = new HashMap<>();
+            idMap.put("id", course.getType().getId()+course.getId());
+            HttpSender.requestForJson("/opt/delete", "DELETE", idMap, json->{
+                countDown.countDown();
+                if(json == null || json.getInteger("state") != 1)
+                    sb.append(course.getId()).append(" ");
+            });
+        });
+        try {
+            countDown.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(sb.length()!=0){
+            sb.append("课程删除失败");
+            return sb.toString();
+        }else{
+            return "删除成功";
+        }
     }
 }

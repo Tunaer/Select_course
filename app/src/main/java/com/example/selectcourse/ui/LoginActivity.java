@@ -29,19 +29,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 初始化加载动画
-        dialog = LoadingDialog.createLoading(LoginActivity.this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // 这一部分用于检查用户登录记录，如果已有登录记录则直接读取并跳转，省去重复登录
-        // 这样可能需要在用户主界面添加重新登录选项，如果不想要此功能，直接注释掉这一部分即可
-        String adminStr = Session.get("admin");
-        if(adminStr != null){
-            boolean isAdmin = Boolean.parseBoolean(adminStr);
-            loginSuccess(isAdmin);
-        }
 
         register = (Button) findViewById(R.id.login_btn_signin);
         login = (Button) findViewById(R.id.login_btn_login);
@@ -62,6 +52,17 @@ public class LoginActivity extends AppCompatActivity {
             intent.setClass(LoginActivity.this, getpwd.class);
             startActivity(intent);
         });
+
+        // 初始化加载动画
+        dialog = LoadingDialog.createLoading(LoginActivity.this);
+
+        // 这一部分用于检查用户登录记录，如果已有登录记录则直接读取并跳转，省去重复登录
+        // 这样可能需要在用户主界面添加重新登录选项，如果不想要此功能，直接注释掉这一部分即可
+        String adminStr = Session.get("admin");
+        if(adminStr != null){
+            boolean isAdmin = Boolean.parseBoolean(adminStr);
+            loginSuccess(isAdmin);
+        }
     }
 
     /**

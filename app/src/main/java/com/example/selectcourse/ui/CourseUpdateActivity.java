@@ -21,6 +21,8 @@ import com.example.selectcourse.ui.popup.LoadingDialog;
 import com.example.selectcourse.ui.popup.ToastUtil;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 创建、修改课程共用页面
@@ -33,6 +35,9 @@ public class CourseUpdateActivity extends AppCompatActivity {
     private Button submitBtn;
     LoadingDialog loading;
 
+    private ArrayAdapter<String> ad;
+    private List<String> list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +49,7 @@ public class CourseUpdateActivity extends AppCompatActivity {
         hourInput = findViewById(R.id.course_publish_hour);
         idInput = findViewById(R.id.course_publish_id);
         wayInput = findViewById(R.id.course_publish_examine);
-        List<String> list = CourseType.getTypeList();
+        list = CourseType.getTypeList();
 
         loading = LoadingDialog.createLoading(CourseUpdateActivity.this);  // 构建加载弹窗
 
@@ -58,20 +63,23 @@ public class CourseUpdateActivity extends AppCompatActivity {
             submitBtn.setText("修改课程");
             // 修改课程模式，自动填充课程已有信息
             nameInput.setText(toModify.getCourseName());
-            hourInput.setText(toModify.getHour());
+            hourInput.setText(toModify.getHourStr());
             idInput.setText(toModify.getId());
             wayInput.setText(toModify.getWay());
-            // 调整下拉列表显示顺序，达到默认选项的效果
-            int oriIndex = list.indexOf(toModify.getType().getName());
-            list.set(oriIndex, list.get(0));
-            list.set(0, toModify.getType().getName());
+            // 调整下拉列表显示顺序，达到默认选项的效果，不支持修改类别，因为这回造成主键变动，需要后端配合
+            // int oriIndex = list.indexOf(toModify.getType().getName());
+            // list.set(oriIndex, list.get(0));
+            // list.set(0, toModify.getType().getName());
+            // 清空选项只留一个
+            list.clear();
+            list.add(toModify.getType().getName());
             // ID 不可修改
             idInput.setInputType(InputType.TYPE_NULL);
             idInput.setTextColor(Color.GRAY);
         }
 
         //为下拉列表定义一个适配器
-        final ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        ad = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
         //设置下拉菜单样式。
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //添加数据
@@ -89,8 +97,10 @@ public class CourseUpdateActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         Course newCourse = new Course(nameInput.getText().toString(),
                 idInput.getText().toString(), Integer.parseInt(hourInput.getText().toString()),
-                wayInput.getText().toString(), courseType.toString());
+                wayInput.getText().toString(), courseType.getSelectedItem().toString());
         String errMsg = CourseService.checkForm(newCourse);
+        AtomicBoolean needRefresh = new AtomicBoolean(false);
+        Semaphore sem = new Semaphore(0);
         if (errMsg != null) {
             ToastUtil.show(CourseUpdateActivity.this, errMsg);
         } else {
@@ -103,11 +113,24 @@ public class CourseUpdateActivity extends AppCompatActivity {
                     idInput.setTextColor(Color.GRAY);
                     editMode = true;
                     submitBtn.setText("修改课程");
+                    // 刷新下拉列表选项
+                    list.clear();
+                    list.add(newCourse.getType().getName());
+                    needRefresh.set(true);
+                    sem.release();
                     ToastUtil.show(CourseUpdateActivity.this, "完成处理");
                 } else {
+                    sem.release();
                     ToastUtil.show(CourseUpdateActivity.this, errMsgStr);
                 }
             });
+            try {
+                sem.acquire();
+                if (needRefresh.get()) ad.notifyDataSetChanged();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
