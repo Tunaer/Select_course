@@ -3,34 +3,29 @@ package com.example.selectcourse.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.selectcourse.R;
 import com.example.selectcourse.entity.Course;
-import com.example.selectcourse.entity.CourseType;
 import com.example.selectcourse.service.CourseService;
 import com.example.selectcourse.ui.popup.LoadingDialog;
 import com.example.selectcourse.ui.popup.ToastUtil;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ManageActivity extends AppCompatActivity {
     EditText courseid, coursername;
@@ -57,6 +52,18 @@ public class ManageActivity extends AppCompatActivity {
         delete = (Button) findViewById(R.id.button4);
         courseListView = findViewById(R.id.course_list);
 
+        // 列表上拉刷新，下拉加载
+        SmartRefreshLayout smartRefresh = findViewById(R.id.smart_refresh);
+        smartRefresh.setOnRefreshListener(layout -> {
+            initList();
+            smartRefresh.finishRefresh();
+            ToastUtil.show(ManageActivity.this, "已刷新");
+        });
+        smartRefresh.setOnLoadMoreListener(layout-> {
+            smartRefresh.finishLoadMore();
+            ToastUtil.show(ManageActivity.this, "没有更多了");
+        });
+
         selectedCourse = new LinkedList<>();
 
         adapter = new SimpleAdapter(ManageActivity.this, coursesToShow,
@@ -66,7 +73,11 @@ public class ManageActivity extends AppCompatActivity {
             CheckBox itemBox = view.findViewById(R.id.course_checkBox);
             boolean check = !itemBox.isChecked();
             itemBox.setChecked(check);
-            if (check) {
+            String selectedCourseId = ((TextView) view.findViewById(R.id.course_sub)).getText().toString().substring(0, 4);
+            final boolean[] correct = {false};
+            pageCourses.forEach(c -> correct[0] |= c.getId().equals(selectedCourseId));
+            if (!correct[0]) ToastUtil.show(ManageActivity.this, "页面数据已过期，请刷新后重试");
+            if (check && correct[0]) {
                 selectedCourse.add(pageCourses.get(i));
             } else {
                 selectedCourse.removeIf(course -> course.getId().equals(pageCourses.get(i).getId()));
@@ -83,13 +94,6 @@ public class ManageActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
-    // 自动刷新
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        initList();
-//    }
 
     public void modifyOne(View view) {
         if (selectedCourse.size() == 0) {
@@ -110,7 +114,6 @@ public class ManageActivity extends AppCompatActivity {
         if (selectedCourse.size() == 0) {
             ToastUtil.show(ManageActivity.this, "请选择要删除的课程");
         } else {
-            // FIXME：无法实现请求完成后自动刷新，加锁则会导致对话框无法弹出，可能需要手动刷新（下拉刷新太麻烦，可以考虑整个按钮）
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setIcon(R.drawable.ic_launcher_foreground)  // 标题的图片
                     .setTitle("注意")
@@ -131,15 +134,20 @@ public class ManageActivity extends AppCompatActivity {
         }
     }
 
-    // 刷新列表
+    // 刷新列表，并清除列表选中状态
     private void initList() {
+        // 清空已选项，因为删除操作导致其在数组内发生了移位，不清空也基本是错的
+        int childCount = courseListView.getChildCount();
+        for(int i=0; i<childCount; i++){
+            CheckBox nowBox = courseListView.getChildAt(i).findViewById(R.id.course_checkBox);
+            nowBox.setChecked(false);
+        }
         coursesToShow.clear();
-        LoadingDialog dialog = LoadingDialog.createLoading(ManageActivity.this);
-        dialog.show("请求数据中");
+        selectedCourse.clear();
+        // 刷新数据
         Semaphore lock = new Semaphore(0);  // 线程同步锁
         CourseService.getAllCourses(courses -> {
             if (courses == null) {
-                dialog.close();
                 finish();
                 lock.release();  // 页面死锁
                 ToastUtil.show(ManageActivity.this, "登录已过期或网络故障");
@@ -154,12 +162,12 @@ public class ManageActivity extends AppCompatActivity {
                 coursesToShow.add(courseData);
             });
             lock.release();
-            dialog.close();
         });
         try {
             lock.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        adapter.notifyDataSetChanged();
     }
 }
