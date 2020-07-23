@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.selectcourse">
-
     <!-- 申请权限：网络、存储 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/http_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/http_config"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.StudentView"></activity>
+        <activity android:name=".ui.Student_cancel"></activity>
+        <activity android:name=".ui.StudentView" />
         <activity android:name=".ui.CourseUpdateActivity" />
         <activity android:name=".ui.ManageActivity" />
         <activity android:name=".ui.GetPwdActivity" />
@@ -28,6 +27,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

@@ -46,7 +46,7 @@ public class UserService {
             params.put("username", username);
             params.put("pwd", pwd1);
             params.put("email", email);
-            params.put("admin", adminKey);
+            params.put("key", adminKey);
 
             HttpSender.requestForJson("/user/signin", "POST", params, json -> {
                 if (json == null) {
