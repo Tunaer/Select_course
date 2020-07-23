@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.selectcourse.R;
 import com.example.selectcourse.service.UserService;
@@ -42,14 +41,14 @@ public class LoginActivity extends AppCompatActivity {
         //跳转注册
         register.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, register.class);
+            intent.setClass(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
 
         //密码找回
         getpwd.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, getpwd.class);
+            intent.setClass(LoginActivity.this, GetPwdActivity.class);
             startActivity(intent);
         });
 

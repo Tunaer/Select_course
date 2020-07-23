@@ -17,8 +17,8 @@
         <activity android:name=".ui.StudentView"></activity>
         <activity android:name=".ui.CourseUpdateActivity" />
         <activity android:name=".ui.ManageActivity" />
-        <activity android:name=".ui.getpwd" />
-        <activity android:name=".ui.register" />
+        <activity android:name=".ui.GetPwdActivity" />
+        <activity android:name=".ui.RegisterActivity" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>

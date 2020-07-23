@@ -11,6 +11,9 @@
     <string name="login_name_label">邮箱：</string>
     <string name="login_title">登 陆 界 面</string>
 
+    <string name="pwd_send_code">发送验证码</string>
+    <string name="pwd_code_inp">输入验证码</string>
+
     <string name="placeholder">占位</string>
     <string name="img_hint">列表图标</string>
 
