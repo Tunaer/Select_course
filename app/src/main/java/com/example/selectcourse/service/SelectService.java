@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.selectcourse.entity.Course;
 import com.example.selectcourse.util.HttpSender;
+import com.example.selectcourse.util.Session;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,8 @@ public class SelectService {
         StringBuilder sb = new StringBuilder();
         toDelete.forEach(course->{
             Map<String, String> idMap = new HashMap<>();
-            idMap.put("course_id", course.getType().getId()+course.getId());
+            idMap.put("id", course.getType().getId()+course.getId());
+            idMap.put("user_email", Session.get("email"));
 //            idMap.put("course_id", course.getType().getId()+course.getId());
             HttpSender.requestForJson("/opt/cancel", "DELETE", idMap, json->{
                 countDown.countDown();
