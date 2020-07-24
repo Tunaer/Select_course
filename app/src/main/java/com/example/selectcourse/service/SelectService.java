@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.selectcourse.entity.Course;
 import com.example.selectcourse.util.HttpSender;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,12 +81,6 @@ public class SelectService {
     private static String coursesToJsonString(List<Course> toParse) {
         JSONArray toCancelArr = new JSONArray();
         toParse.forEach(course -> toCancelArr.add(course.getType().getId() + course.getId()));
-        String arrString = "[]";
-        try {
-            arrString = URLEncoder.encode(toCancelArr.toJSONString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return arrString;
+        return toCancelArr.toJSONString();
     }
 }
