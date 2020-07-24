@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.selectcourse.R;
 import com.example.selectcourse.entity.Course;
+import com.example.selectcourse.entity.CourseType;
 import com.example.selectcourse.service.CourseService;
 import com.example.selectcourse.service.SelectService;
 import com.example.selectcourse.ui.popup.LoadingDialog;
@@ -26,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class StudentView extends AppCompatActivity {
@@ -38,8 +43,9 @@ public class StudentView extends AppCompatActivity {
     private List<Course> pageCourses;
     private List<Course> selectedCourse;
     private SimpleAdapter adapter;
-
-
+    LoadingDialog loading;
+    private ArrayAdapter<String> ad;
+    private List<String> list;
 
 
     @Override
@@ -50,6 +56,8 @@ public class StudentView extends AppCompatActivity {
         select = (Button) findViewById(R.id.button7);//选课
         selected = (Button) findViewById(R.id.button5);//查询已选课程
         courseListView = findViewById(R.id.course_list);
+        list = CourseType.getTypeList();
+        loading = LoadingDialog.createLoading(StudentView.this);  // 构建加载弹窗
 
         // 列表上拉刷新，下拉加载
         SmartRefreshLayout smartRefresh = findViewById(R.id.smart_refresh);
@@ -86,6 +94,8 @@ public class StudentView extends AppCompatActivity {
         initList();
         courseListView.setAdapter(adapter);
 
+
+
         //跳转已选课程界面
         selected.setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -100,7 +110,27 @@ public class StudentView extends AppCompatActivity {
         } else if (selectedCourse.size() != 1) {
             ToastUtil.show(StudentView.this, "一次只能选一门课程");
         } else {
-
+            LoadingDialog loadingDialog = LoadingDialog.createLoading(StudentView.this);
+            if (selectedCourse.size() == 0) {
+                ToastUtil.show(StudentView.this, "请选择要选的课程");
+            } else {
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_launcher_foreground)  // 标题的图片
+                        .setTitle("注意")
+                        .setMessage("是否选退" + selectedCourse.size() + "门课程？")
+                        .setNegativeButton("取消", (d1, which) -> {
+                            d1.dismiss();
+                        }).setPositiveButton("确定", (d2, which) -> {
+                            d2.dismiss();
+                            loadingDialog.show("选课中...");
+                            String msg = SelectService.selectCourse(selectedCourse);
+                            loadingDialog.close();
+                            pageCourses.removeAll(selectedCourse);  // 从列表中移除已删除的课程，防止页面未刷新导致重复提交
+                            selectedCourse.clear();  // 清空选项，但无法在子线程中更新 UI，锁控制并不可以，效果就是删除后无法从列表中移除
+                            ToastUtil.show(StudentView.this, msg);
+                        }).create();
+                dialog.show();
+            }
         }
     }
 
