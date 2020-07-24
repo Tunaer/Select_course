@@ -3,7 +3,6 @@ package com.example.selectcourse.service;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.selectcourse.ui.RegisterActivity;
 import com.example.selectcourse.ui.popup.ToastUtil;
 import com.example.selectcourse.util.HttpSender;
 

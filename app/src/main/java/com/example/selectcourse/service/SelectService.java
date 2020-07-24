@@ -4,32 +4,45 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.selectcourse.entity.Course;
 import com.example.selectcourse.util.HttpSender;
-import com.example.selectcourse.util.Session;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
 /**
  * @author tunaer
  * 07.23 22:30
  * 课程实体类
  */
 public class SelectService {
-    // 选课
-    public static void selectCourse(Course toUpload, Consumer<String> callback) {
+    // 选课，阻塞到请求返回
+    public static String selectCourse(List<Course> toUpload) {
         String url, method;
         url = "/opt/select";
         method = "POST";
-
-        HttpSender.requestForJson(url, method, toUpload.toParamMap(),
-                json -> {
-                    if (json == null) callback.accept("网络故障");
-                    else if (json.getInteger("state") == 0) callback.accept("权限不足或登录过期");
-                    else callback.accept(null);
-                });
+        String courses = coursesToJsonString(toUpload);
+        HashMap<String, String> idMap = new HashMap<>(1);
+        idMap.put("courses", courses);
+        Semaphore sem = new Semaphore(0);
+        AtomicReference<String> result = new AtomicReference<>();
+        HttpSender.requestForJson(url, method, idMap, json -> {
+            if (json == null) result.set("网络故障");
+            else if (json.getInteger("state") == 0) result.set("登录无效");
+            else result.set("新选了" + json.getString("msg") + "门课");
+            sem.release();
+        });
+        try {
+            sem.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return result.get();
     }
 
     // 获取已选课程
@@ -46,30 +59,36 @@ public class SelectService {
         });
     }
 
+    // 退课请求，调用后会阻塞直到请求返回
     public static String cancelCourses(List<Course> toDelete) {
-        CountDownLatch countDown = new CountDownLatch(toDelete.size());
-        StringBuilder sb = new StringBuilder();
-        toDelete.forEach(course->{
-            Map<String, String> idMap = new HashMap<>();
-            idMap.put("id", course.getType().getId()+course.getId());
-            idMap.put("user_email", Session.get("email"));
-//            idMap.put("course_id", course.getType().getId()+course.getId());
-            HttpSender.requestForJson("/opt/cancel", "DELETE", idMap, json->{
-                countDown.countDown();
-//                if(json == null || json.getInteger("state") != 1)
-//                    sb.append(course.getId()).append(" ");
-            });
+        Semaphore sem = new Semaphore(0);
+        String arrString = coursesToJsonString(toDelete);
+        Map<String, String> idMap = new HashMap<>();
+        idMap.put("courses", arrString);
+        AtomicReference<String> result = new AtomicReference<>();
+        HttpSender.requestForJson("/opt/cancel", "DELETE", idMap, json -> {
+            if (json == null) result.set("网络故障");
+            else if (json.getInteger("state") == 0) result.set("登录无效");
+            else result.set("已删除" + json.getString("msg") + "门课程");  // 成功的情况
+            sem.release();
         });
         try {
-            countDown.await();
+            sem.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(sb.length()!=0){
-            sb.append("课程退课失败");
-            return sb.toString();
-        }else{
-            return "退课成功";
+        return result.get();
+    }
+
+    private static String coursesToJsonString(List<Course> toParse) {
+        JSONArray toCancelArr = new JSONArray();
+        toParse.forEach(course -> toCancelArr.add(course.getType().getId() + course.getId()));
+        String arrString = "[]";
+        try {
+            arrString = URLEncoder.encode(toCancelArr.toJSONString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        return arrString;
     }
 }
